@@ -34,7 +34,7 @@ def get_center(contour):
 
 def main():
     while True:
-        if cv2.getWindowProperty('Pencere', cv2.WND_PROP_VISIBLE) < 1:
+        if cv2.getWindowProperty('Window', cv2.WND_PROP_VISIBLE) < 1:
             break
         success, frame = cap.read()
         if not success:
