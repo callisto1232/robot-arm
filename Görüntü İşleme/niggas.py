@@ -1,12 +1,13 @@
 import cv2
 import numpy as np
+import sys
 
 # Initialize the camera (0 is usually the USB webcam or PiCamera)
 cap = cv2.VideoCapture(0)
 
-# Set camera resolution (Lower resolution is faster on Raspberry Pi)
-cap.set(3, 640)
-cap.set(4, 480)
+img = np.zeros((1080, 1920, 3), dtype=np.uint8)
+
+cv2.imshow('Window', img)
 
 # Define color ranges in HSV
 # format: Color Name: [Lower HSV, Upper HSV]
@@ -31,61 +32,68 @@ def get_center(contour):
         return cX, cY
     return 0, 0
 
-while True:
-    success, frame = cap.read()
-    if not success:
-        break
-
-    # Convert BGR image to HSV for better color processing
-    hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-
-    # Loop through each color we want to track
-    for color_name, (lower, upper) in colors.items():
-        
-        # 1. Create a mask for the color
-        mask = cv2.inRange(hsv, lower, upper)
-        
-        # 2. Remove noise (Erosion + Dilation)
-        mask = cv2.erode(mask, None, iterations=2)
-        mask = cv2.dilate(mask, None, iterations=2)
-
-        # 3. Find Contours
-        contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-
-        for cnt in contours:
-            area = cv2.contourArea(cnt)
+def main():
+    while True:
+        if cv2.getWindowProperty('Pencere', cv2.WND_PROP_VISIBLE) < 1:
+            break
+        success, frame = cap.read()
+        if not success:
+            break
+    
+        # Convert BGR image to HSV for better color processing
+        hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+    
+        # Loop through each color we want to track
+        for color_name, (lower, upper) in colors.items():
             
-            # shape_type will identify if it's the item or the container
-            shape_type = ""
+            # 1. Create a mask for the color
+            mask = cv2.inRange(hsv, lower, upper)
             
-            # Logic: Differentiate Box vs Cube by Size
-            if MIN_CUBE_AREA < area < MAX_CUBE_AREA:
-                shape_type = "CUBE (Pick)"
-                # This (cX, cY) is where the robot arm goes to PICK
-                cX, cY = get_center(cnt)
+            # 2. Remove noise (Erosion + Dilation)
+            mask = cv2.erode(mask, None, iterations=2)
+            mask = cv2.dilate(mask, None, iterations=2)
+    
+            # 3. Find Contours
+            contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    
+            for cnt in contours:
+                area = cv2.contourArea(cnt)
                 
-                # Visuals
-                cv2.drawContours(frame, [cnt], -1, (0, 255, 0), 2)
-                cv2.putText(frame, f"{color_name} {shape_type}", (cX - 20, cY - 20),
-                            cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
-                cv2.circle(frame, (cX, cY), 5, (255, 255, 255), -1)
-
-            elif MIN_BOX_AREA < area < MAX_BOX_AREA:
-                shape_type = "BOX (Place)"
-                # This (cX, cY) is where the robot arm goes to PLACE
-                cX, cY = get_center(cnt)
+                # shape_type will identify if it's the item or the container
+                shape_type = ""
                 
-                # Visuals
-                cv2.drawContours(frame, [cnt], -1, (0, 0, 255), 3) # Thicker line for box
-                cv2.putText(frame, f"{color_name} {shape_type}", (cX - 20, cY - 20),
-                            cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 255), 2)
-
-    # Show the result
-    cv2.imshow("Raspberry Pi Tracking", frame)
-
-    # Press 'q' to quit
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
+                # Logic: Differentiate Box vs Cube by Size
+                if MIN_CUBE_AREA < area < MAX_CUBE_AREA:
+                    shape_type = "CUBE (Pick)"
+                    # This (cX, cY) is where the robot arm goes to PICK
+                    cX, cY = get_center(cnt)
+                    
+                    # Visuals
+                    cv2.drawContours(frame, [cnt], -1, (0, 255, 0), 2)
+                    cv2.putText(frame, f"{color_name} {shape_type}", (cX - 20, cY - 20),
+                                cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
+                    cv2.circle(frame, (cX, cY), 5, (255, 255, 255), -1)
+    
+                elif MIN_BOX_AREA < area < MAX_BOX_AREA:
+                    shape_type = "BOX (Place)"
+                    # This (cX, cY) is where the robot arm goes to PLACE
+                    cX, cY = get_center(cnt)
+                    
+                    # Visuals
+                    cv2.drawContours(frame, [cnt], -1, (0, 0, 255), 3) # Thicker line for box
+                    cv2.putText(frame, f"{color_name} {shape_type}", (cX - 20, cY - 20),
+                                cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 255), 2)
+    
+        # Show the result
+        cv2.imshow("Raspberry Pi Tracking", frame)
+    
+        # Press 'q' to quit
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
 
 cap.release()
 cv2.destroyAllWindows()
+
+if __name__ == "__main__":
+    main()
+    sys.exit()
