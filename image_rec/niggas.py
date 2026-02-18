@@ -1,12 +1,16 @@
 import cv2
 import numpy as np
+# from picamera2 import Picamera2
+# import when finalized
 
 # Initialize the camera (0 is usually the USB webcam or PiCamera)
 cap = cv2.VideoCapture(0)
 
 # Set camera resolution (Lower resolution is faster on Raspberry Pi)
-cap.set(3, 640)
-cap.set(4, 480)
+# 4608x2592@14 FPS  2304x1296@56 FPS  1536x864@120FPS
+# Probably 2304x1296 for final code
+cap.set(3, 1920)
+cap.set(4, 1080)
 
 # Define color ranges in HSV
 # format: Color Name: [Lower HSV, Upper HSV]
@@ -89,3 +93,13 @@ while True:
 
 cap.release()
 cv2.destroyAllWindows()
+
+if __name__ == "__main__":
+    try:
+        main()
+    except KeyboardInterrupt:
+        print("Interrupted, exiting...)"
+        sys.exit()
+    except Exception as e:
+        print("Exception:", e)
+
