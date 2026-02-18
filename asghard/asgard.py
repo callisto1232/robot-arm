@@ -1,7 +1,13 @@
+#Python kodunu güncelle-wifi üzerinden raspberry Pİ ile bağlantı kurup arayüzden 
+
+
+
 import sys
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
+import socket 
+import 
 
 from gui import Ui_MainWindow
 from about import Ui_Dialog as About_Ui_Dialog
