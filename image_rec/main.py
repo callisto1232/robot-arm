@@ -100,10 +100,10 @@ if __name__ == "__main__":
     try:
         main()
     except KeyboardInterrupt:
-        print("Interrupted, exiting...")
+        print("\nInterrupted, exiting...")
         sys.exit()
     except Exception as e:
-        print("Exception:", e)
+        print("\nException:", e)
     finally:
         cap.release()
         cv2.destroyAllWindows()
