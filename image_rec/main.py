@@ -4,14 +4,18 @@ import sys
 # from picamera2 import Picamera2
 # import when finalized
 
+WINDOW = "window" # name of the window
+DOT = 1 # to determine the number of dots at the "camera opening.."
+
 # Initialize the camera (0 is usually the USB webcam or PiCamera)
 cap = cv2.VideoCapture(0)
 
 # Set camera resolution (Lower resolution is faster on Raspberry Pi)
 # 4608x2592@14 FPS  2304x1296@56 FPS  1536x864@120FPS
 # Probably 2304x1296 for final code
-cap.set(3, 1920)
-cap.set(4, 1080)
+cap.set(3, 1280)
+cap.set(4, 720)
+
 
 # Define color ranges in HSV
 # format: Color Name: [Lower HSV, Upper HSV]
@@ -37,9 +41,12 @@ def get_center(contour):
     return 0, 0
 
 def main():
-    print("Starting camera...")
+    print("Press Q or click close window to exit")
+    print("Camera opening", end="")
     for i in range(30):  # Camera warmup
+        print(".", end="", flush=True)
         cap.read()
+    print()
 
     while True:
         success, frame = cap.read()
@@ -90,9 +97,11 @@ def main():
                     cv2.putText(frame, f"{color_name} {shape_type}", (cX - 20, cY - 20),
                                 cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 255), 2)
     
-        cv2.imshow("Raspberry Pi Tracking", frame)
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-                    break
+        cv2.imshow(WINDOW, frame)
+        key = cv2.waitKey(1) & 0xFF
+        if key == ord('q') or cv2.getWindowProperty(WINDOW, cv2.WND_PROP_VISIBLE) < 1:
+            print("\nClosing...")
+            break
 
 
 
