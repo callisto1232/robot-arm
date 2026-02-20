@@ -6,8 +6,8 @@ import sys
 
 WINDOW = "Görüntü İşleme" # name of the window
 MIN_CUBE_AREA = 500
-MAX_CUBE_AREA = 5000
-MIN_BOX_AREA = 5000
+MAX_CUBE_AREA = 10000
+MIN_BOX_AREA = 10000
 MAX_BOX_AREA = 50000
 
 
@@ -27,7 +27,14 @@ cap.set(4, 720)
 colors = {
     "Red": [np.array([0, 120, 70]), np.array([10, 255, 255])],
     "Blue": [np.array([94, 80, 2]), np.array([126, 255, 255])],
-    "Green": [np.array([25, 52, 72]), np.array([102, 255, 255])]
+    "Green": [np.array([25, 52, 72]), np.array([102, 255, 255])],
+    "Orange": [np.array([5, 100, 100]), np.array([15, 255, 255])],
+    "Yellow": [np.array([20, 100, 100]), np.array([30, 255, 255])],
+    "Purple": [np.array([120, 100, 100]), np.array([140, 255, 255])],
+    "Pink": [np.array([140, 100, 100]), np.array([160, 255, 255])],
+    "Brown": [np.array([10, 100, 20]), np.array([20, 255, 200])],
+    "Black": [np.array([0, 0, 0]), np.array([180, 255, 30])]
+
 }
 
 
