@@ -5,7 +5,10 @@ import sys
 # import when finalized
 
 WINDOW = "window" # name of the window
-DOT = 1 # to determine the number of dots at the "camera opening.."
+MIN_CUBE_AREA = 500
+MAX_CUBE_AREA = 5000
+MIN_BOX_AREA = 5000
+MAX_BOX_AREA = 50000
 
 # Initialize the camera (0 is usually the USB webcam or PiCamera)
 cap = cv2.VideoCapture(0)
@@ -26,10 +29,6 @@ colors = {
 }
 
 # Define size thresholds to distinguish Cube vs Box
-MIN_CUBE_AREA = 500
-MAX_CUBE_AREA = 5000
-MIN_BOX_AREA = 5000
-MAX_BOX_AREA = 50000
 
 def get_center(contour):
     """Calculates the center (x, y) of a contour."""
