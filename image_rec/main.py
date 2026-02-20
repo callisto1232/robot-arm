@@ -4,14 +4,16 @@ import sys
 # from picamera2 import Picamera2
 # import when finalized
 
-WINDOW = "window" # name of the window
+WINDOW = "Görüntü İşleme" # name of the window
 MIN_CUBE_AREA = 500
 MAX_CUBE_AREA = 5000
 MIN_BOX_AREA = 5000
 MAX_BOX_AREA = 50000
 
+
 # Initialize the camera (0 is usually the USB webcam or PiCamera)
 cap = cv2.VideoCapture(0)
+
 
 # Set camera resolution (Lower resolution is faster on Raspberry Pi)
 # 4608x2592@14 FPS  2304x1296@56 FPS  1536x864@120FPS
@@ -27,6 +29,7 @@ colors = {
     "Blue": [np.array([94, 80, 2]), np.array([126, 255, 255])],
     "Green": [np.array([25, 52, 72]), np.array([102, 255, 255])]
 }
+
 
 # Define size thresholds to distinguish Cube vs Box
 
