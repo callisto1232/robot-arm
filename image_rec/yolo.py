@@ -2,7 +2,7 @@ import cv2
 from ultralytics import YOLO
 
 # 1. Load the model (Automatically uses your M3 GPU if available)
-model = YOLO('yolov8n.pt') 
+model = YOLO('runs/detect/train/weights/best.pt')
 
 # 2. Open MacBook Camera
 cap = cv2.VideoCapture(0)
@@ -43,7 +43,7 @@ while True:
                         cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
             cv2.circle(frame, (cX, cY), 5, (0, 0, 255), -1)
 
-    cv2.imshow("Tree Media Industrial Vision", frame)
+    cv2.imshow("Hell off a robotic arm AI image Rec.", frame)
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
