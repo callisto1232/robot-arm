@@ -1,8 +1,10 @@
 import cv2
 import numpy as np
 import sys
+
 # from picamera2 import Picamera2
 # import when finalized
+
 
 WINDOW = "Görüntü İşleme" # name of the window
 MIN_CUBE_AREA = 5000
